@@ -1,3 +1,15 @@
+#include <IRremote.h>
+
+// The remote-control reader
+// Right = 5 v
+// Middle = GRD
+// Left = pin3
+
+// Remote-Control signal
+// 1 = 3910598400 = E916FF00
+// 2 = 3860463360 = E619FF00
+// 3 = 4061003520 = F20DFF00
+
 const int relay = 7;
 IRrecv IR(3);
 
@@ -28,7 +40,7 @@ void loop() {
     // When number 2 is recieved 
     if (IR.decodedIRData.decodedRawData == 0xE619FF00) {
       digitalWrite(relay, HIGH); // Connects the external wires
-      delay(getMilli(......)); // Pour the water for .... but use milliseconds
+      // delay(getMilli(......)); // Pour the water for .... but use milliseconds
       digitalWrite(relay, LOW); // Disconnects the external wires
     }
     delay(1500);
