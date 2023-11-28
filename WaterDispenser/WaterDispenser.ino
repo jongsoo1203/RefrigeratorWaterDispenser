@@ -30,8 +30,8 @@ IRrecv IR(6);
 unsigned long lcdUpdateTime = 0;
 unsigned long irCheckTime = 0;
 int currentTextIndex1,currentTextIndex2  = 0;
-const int LED = 9;
-const int LEDBacklight = 10;
+const int LCD = 9;
+const int LCDBacklight = 10;
 const int motionPin = 13;
 unsigned long lastMotionTime = 0;
 const unsigned long motionDelay = 300000; // 5 minutes to screen off 
@@ -40,10 +40,10 @@ bool lcdResetFlag = false;
 void setup() {
   pinMode(relay, OUTPUT);
   pinMode(buzzer, OUTPUT);
-  pinMode(LED, OUTPUT);
+  pinMode(LCD, OUTPUT);
   pinMode(motionPin, INPUT);
-  pinMode(LEDBacklight, OUTPUT);
-  digitalWrite(LEDBacklight, HIGH);
+  pinMode(LCDBacklight, OUTPUT);
+  digitalWrite(LCDBacklight, HIGH);
   lcd.begin(16, 2);
   // To get the input from the remote control
   IR.enableIRIn();
@@ -64,8 +64,8 @@ void motionDetection() {
   
   if (motionState == HIGH && !lcdResetFlag) {
     Serial.println("Motion detected!");
-    digitalWrite(LED, LOW); // Activate display when motion is detected
-    digitalWrite(LEDBacklight, HIGH);
+    digitalWrite(LCD, LOW); // Activate display when motion is detected
+    digitalWrite(LCDBacklight, HIGH);
     lcdReset();
     lastMotionTime = millis();// Record the time of the last motion detection
     lcdResetFlag = true;
@@ -73,8 +73,8 @@ void motionDetection() {
     //Serial.println("No motion detected.");
     // Check if the elapsed time since the last motion is greater than the delay
     if (millis() - lastMotionTime > motionDelay) {
-      digitalWrite(LED, HIGH); // De-activate display when motion is detected
-      digitalWrite(LEDBacklight, LOW);
+      digitalWrite(LCD, HIGH); // De-activate display when motion is detected
+      digitalWrite(LCDBacklight, LOW);
       lcdResetFlag = false;
     }
   }
@@ -216,7 +216,7 @@ void customFilling() {
         case 0xB54AFF00: // #
           panic = true;
           lcd.clear();
-          lcd.print("CANCELLED");
+          lcd.print("CANCELLCD");
           doubleBeepSound();
           delay(50);
           doubleBeepSound();
@@ -279,7 +279,8 @@ void displayLoadingBar(float seconds) {
   lcd.print("Filling Up...");
   lcd.setCursor(0, 1); // Move cursor to the second line
   for (int i = 0; i < barLength; ++i) {
-    lcd.print("#");
+    //lcd.print("#");
+    lcd.write(0xFF); // full block characheter 
     delay((int)delayTime); // Convert delayTime to an integer before using it in delay()
   }
   lcd.clear();
