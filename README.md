@@ -1,6 +1,7 @@
 # Smart Refrigerator Water Dispenser
 
 Are your mornings a rush, and those precious 40 seconds spent at the fridge seem like an eternity? Instead of sacrificing more sleep, why not make life easier? Enter the Smart Refrigerator Water Dispenser project!
+
 Schematics, code instructions, and 3D (stl for 3d printer) files
 
 ## Overview
