@@ -40,5 +40,7 @@ Download the file WaterDispenser/WaterDispenser.ino load that into Arduino IDE a
 
 -3D printable files are in STL_files folder
 ![3D design](https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/bef2b874-d871-40e2-90d2-5a8ef3ee35ca)
+[Water Dispenser.pdf](https://github.com/loty2019/RefrigeratorWaterDispenser/files/13521786/Water.Dispenser.pdf)
+
 
 **Collaboration:** Lorenzo and Jongsoo
