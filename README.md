@@ -35,6 +35,8 @@ Make your mornings smoother, and add a touch of tech to your kitchen with the Sm
 Download the file WaterDispenser/WaterDispenser.ino load that into Arduino IDE and then upload it to the Arduino UNO.
 
 ### How to Build
-Follow the schematics and picture below attached
+-Follow the schematics and picture attached below
+-3D printable files are in STL_files folder
+![3D design](https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/bef2b874-d871-40e2-90d2-5a8ef3ee35ca)
 
 **Collaboration:** Lorenzo and Jongsoo
