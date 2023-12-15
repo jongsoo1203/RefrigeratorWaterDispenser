@@ -1,3 +1,5 @@
+Collaboration: Lorenzo, Jongsoo, Minh
+
 # Smart Refrigerator Water Dispenser
 
 Schematics, code, Web-app and 3D files all available.
