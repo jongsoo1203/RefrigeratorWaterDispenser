@@ -68,6 +68,4 @@ Others coming soon...
 - Set up a database
   
 - FINAL PRODUCT (you can build a case for it but I like to see it exposed lol)
-![D53EC29F-99C7-4F6F-B942-45D6F962945D_1_102_o](https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/09e5abb5-40af-4328-92a0-09816c7f1bb5)
 
-**Collaboration:** Lorenzo, Jongsoo, Minh
