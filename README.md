@@ -1,4 +1,4 @@
-Collaboration: Lorenzo, Jongsoo, Minh
+Collaboration: Lorenzo, Jongsoo, Minh, Max
 
 # Smart Refrigerator Water Dispenser
 
