@@ -59,6 +59,7 @@ Others coming soon...
 ### How to Build (soldering might be required)
 
 - Follow the schematics and picture attached below (these are for the prototype) if you are not using the I2C protocol to cominicate with the display then use a NPN transistor to turn off the screen.
+  I actually used a 3 pin relay so the image below is not accurate
 <img width="847" alt="Screenshot 2023-12-01 at 2 03 21 AM" src="https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/e65917bb-6f01-427a-8e4f-efa38740c8e7">
 [Water Dispenser.pdf](https://github.com/loty2019/RefrigeratorWaterDispenser/files/13521786/Water.Dispenser.pdf)
 
