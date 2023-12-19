@@ -136,18 +136,24 @@ void checkIRInput() {
   // Update the current date and time
   if (getLocalTime(&timeinfo)) {
     float ozNew;
+    bool recieved = false;
     if (IR.decode()) {
       // Convert the signal value to a number
       Serial.println(IR.decodedIRData.decodedRawData, HEX);
       // Remote input cases
       switch (IR.decodedIRData.decodedRawData) {
         case 0xE916FF00: // 1 my water
+          doubleBeepSound();
+          lcd.clear();
+          lcd.print("Loading...");
           flowing(getSeconds(LoreWHydroFlask), LoreWHydroFlask);
+          lcd.print("Loading...");
           if (firebase.setInt("/records/" + formatDate(&timeinfo) + "/lorenzo/" + formatTime(&timeinfo), LoreWHydroFlask)){
             foreverTotal = firebase.getFloat("/records/forever_consumption");
             foreverTotal += LoreWHydroFlask;
             if (firebase.setFloat("/records/forever_consumption", foreverTotal)) {
-              Serial.println("Pushed Success");
+              //Serial.println("Pushed Success");
+              lcd.setCursor(0, 1);
               lcd.print("Pushed Success");
               delay(2000);
             } else {
@@ -166,12 +172,17 @@ void checkIRInput() {
           }
           break;
         case 0xE619FF00: // 2 laci water
+          doubleBeepSound();
+          lcd.clear();
+          lcd.print("Loading...");
           flowing(getSeconds(LaciHydroFlask), LaciHydroFlask);
+          lcd.print("Loading...");
           if (firebase.setInt("/records/" + formatDate(&timeinfo) + "/laci/" + formatTime(&timeinfo), LaciHydroFlask)){
             foreverTotal = firebase.getFloat("/records/forever_consumption");
             foreverTotal += LaciHydroFlask;
             if (firebase.setFloat("/records/forever_consumption", foreverTotal)) {
-              Serial.println("Pushed Success");
+              //Serial.println("Pushed Success");
+              lcd.setCursor(0, 1);
               lcd.print("Pushed Success");
               delay(2000);
             } else {
@@ -194,18 +205,83 @@ void checkIRInput() {
           // increase performance and user expirience but worst memory 
           ozNew = customFilling();
           if (ozNew != 0) {
-            foreverTotal = firebase.getFloat("/records/forever_consumption");
-            foreverTotal += ozNew;
-            if (firebase.setFloat("/records/forever_consumption", foreverTotal)) {
-              Serial.println("Pushed Success");
-              lcd.print("Pushed Success");
-              delay(2000);
-            } else {
-              Serial.println("Pushed Failed Error#02");
-              lcd.print("Pushed Failed");
-              lcd.setCursor(0, 1);
-              lcd.print("Error#02");
-              delay(2000);
+            // assign water consumprio to the person
+            lcd.clear();
+            lcd.print("Record it ?");
+            lcd.setCursor(0, 1);
+            lcd.print("# to cancel");
+            // loop wait for user input
+            while (!recieved) {
+              if (IR.decode()) {
+                if (IR.decodedIRData.decodedRawData == 0xBF40FF00) { // if ok is pressed
+                  doubleBeepSound();
+                  lcd.clear();
+                  lcd.print("Press ur number");
+                  lcd.setCursor(0, 1);
+                  lcd.print("to record data..");
+                  while (!recieved) {
+                    if (IR.decode()) {
+                      switch (IR.decodedIRData.decodedRawData) {
+                        case 0xE916FF00: // 1 my water
+                          doubleBeepSound();
+                          lcd.clear();
+                          lcd.print("Loading...");
+                          if (firebase.setInt("/records/" + formatDate(&timeinfo) + "/lorenzo/" + formatTime(&timeinfo), ozNew)){
+                            foreverTotal = firebase.getFloat("/records/forever_consumption");
+                            foreverTotal += ozNew;
+                            firebase.setFloat("/records/forever_consumption", foreverTotal);
+
+                            Serial.println("Pushed Success");
+                            lcd.setCursor(0, 1);
+                            lcd.print("Pushed Success");
+                            delay(2000);
+                          } else {
+                            Serial.println("Pushed Failed Error#01");
+                            lcd.print("Pushed Failed");
+                            lcd.setCursor(0, 1);
+                            lcd.print("Error#01");
+                            delay(2000);
+                          }
+                          recieved = true;
+                          break;
+                        case 0xE619FF00: // 2 laci water
+                          doubleBeepSound();
+                          lcd.clear();
+                          lcd.print("Loading...");
+                          if (firebase.setInt("/records/" + formatDate(&timeinfo) + "/lorenzo/" + formatTime(&timeinfo), ozNew)){
+                            foreverTotal = firebase.getFloat("/records/forever_consumption");
+                            foreverTotal += ozNew;
+                            firebase.setFloat("/records/forever_consumption", foreverTotal);
+
+                            //Serial.println("Pushed Success");
+                            lcd.setCursor(0, 1);
+                            lcd.print("Pushed Success");
+                            delay(2000);
+                          } else {
+                            //Serial.println("Pushed Failed Error#01");
+                            lcd.print("Pushed Failed");
+                            lcd.setCursor(0, 1);
+                            lcd.print("Error#01");
+                            delay(2000);
+                          }
+                          recieved = true;
+                          break;
+                      }
+                      delay(500);
+                      IR.resume();
+                    }
+                  }
+                }
+                // if # we brake and exit the loop
+                else if (IR.decodedIRData.decodedRawData == 0xB54AFF00) {
+                  doubleBeepSound();
+                  lcd.clear();
+                  recieved = true;
+                  break;
+                }
+                delay(200);
+                IR.resume();
+              }
             }
           }
           break;
@@ -213,7 +289,7 @@ void checkIRInput() {
           flowMenu();
           break;
       }
-      delay(1500);
+      delay(15000);
       IR.resume();
     }
   } else {
@@ -387,7 +463,7 @@ float customFilling() {
         case 0xBF40FF00: // OK when done
           singleBeepSound();
           lcd.clear();
-          Serial.println("OK recieved");
+          //Serial.println("OK recieved");
           lcd.print(resultStr + " Oz Confirmed");
           delay(500);
           check = false;
@@ -422,7 +498,7 @@ float customFilling() {
     }
   }
   if (panic == false) {
-    Serial.println(resultStr);
+    //Serial.println(resultStr);
     float resultFloat = resultStr.toFloat();
     flowing(getSeconds(resultFloat), resultFloat);
     return(resultFloat);
@@ -463,7 +539,7 @@ void flowing(int bottle, float oz){
   // end sound
   doubleBeepSound();
   lcd.print("!!!!! DONE !!!!!");
-  delay(5000);
+  delay(2000);
   lcd.clear();
   lcd.setCursor(0, 0);
 }
