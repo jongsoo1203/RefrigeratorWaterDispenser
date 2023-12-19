@@ -1,3 +1,5 @@
+Collaboration: Lorenzo, Jongsoo, Minh, Max
+
 # Smart Refrigerator Water Dispenser
 
 Schematics, code, Web-app and 3D files all available.
@@ -57,6 +59,7 @@ Others coming soon...
 ### How to Build (soldering might be required)
 
 - Follow the schematics and picture attached below (these are for the prototype) if you are not using the I2C protocol to cominicate with the display then use a NPN transistor to turn off the screen.
+  I actually used a 3 pin relay so the image below is not accurate
 <img width="847" alt="Screenshot 2023-12-01 at 2 03 21 AM" src="https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/e65917bb-6f01-427a-8e4f-efa38740c8e7">
 [Water Dispenser.pdf](https://github.com/loty2019/RefrigeratorWaterDispenser/files/13521786/Water.Dispenser.pdf)
 
@@ -66,6 +69,4 @@ Others coming soon...
 - Set up a database
   
 - FINAL PRODUCT (you can build a case for it but I like to see it exposed lol)
-![D53EC29F-99C7-4F6F-B942-45D6F962945D_1_102_o](https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/09e5abb5-40af-4328-92a0-09816c7f1bb5)
 
-**Collaboration:** Lorenzo, Jongsoo, Minh
