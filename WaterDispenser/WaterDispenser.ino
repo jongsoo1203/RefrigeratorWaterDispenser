@@ -32,6 +32,7 @@ const char* textArray2[] = {
 #include <Wire.h>
 #include <EEPROM.h>
 #include <math.h>
+#include <esp_sleep.h>
 
 #define _SSID "IoT"          // Your WiFi SSID
 #define _PASSWORD "BigKhauna69"      // Your WiFi Password
@@ -49,9 +50,11 @@ int currentTextIndex1,currentTextIndex2  = 0;
 const int motionPin = 25;
 unsigned long lastMotionTime = 0;
 const unsigned long motionDelay = 150000; // 5 minutes to screen off 
-//bool lcdResetFlag = false;
-//const int LED_BUILTIN = 2;
+int wakeHour = 0;
+int wakeMinute = 0;
+int wakeSeconds = 0;
 float foreverTotal = 0;
+bool alreadyDoneReset = false;
 
 void setup() {
   Serial.begin(115200);
@@ -64,6 +67,7 @@ void setup() {
   IR.enableIRIn();
   lcd.begin();
   lcd.backlight();
+  Wire.begin();
   delay(100);
 
   // Connect to WiFi
@@ -81,17 +85,9 @@ void setup() {
     lcd.print("-");
     overflowCount+= 1;
     if (overflowCount >= 16) {
-      lcd.setCursor(0, 1);
-      lcd.print("                ");
-      overflowCount = 0;
-      lcd.setCursor(0, 1);
+      ESP.restart();
     }
   }
-
-  // Print the IP address
-  //Serial.print("IP Address: ");
-  //Serial.print("http://");
-  //Serial.print(WiFi.localIP());
 
   // Initialize time with NTP
   configTime(-5 * 3600, 0, "pool.ntp.org", "time.nist.gov");
@@ -100,8 +96,54 @@ void setup() {
   while (!getLocalTime(&timeinfo)) {
     delay(300);
   }
-  
-  //Serial.println("Time obtained");
+
+  // Calculate the time until midnight
+  time_t now = mktime(&timeinfo);
+  struct tm midnightTime = timeinfo;
+  midnightTime.tm_hour = wakeHour;
+  midnightTime.tm_min = wakeMinute;
+  midnightTime.tm_sec = wakeSeconds;
+  time_t midnight = mktime(&midnightTime);
+  long timeToMidnight = difftime(midnight, now);
+  Serial.println(String(timeToMidnight));
+
+  if (abs(timeToMidnight) <= 60) {
+    // The current time is within the range 00:00 to 00:01
+    // Execute Reset operation for website purpose 
+    lcd.clear();
+    lcd.print("Resetting...");
+    lcd.setCursor(0, 1);
+    lcd.print("Please Wait");
+    if (getLocalTime(&timeinfo)) {
+      if (firebase.setInt("/records/" + formatDate(&timeinfo) + "/lorenzo/" + formatTime(&timeinfo), 0) && firebase.setInt("/records/" + formatDate(&timeinfo) + "/laci/" + formatTime(&timeinfo), 0)) {
+        foreverTotal = firebase.getFloat("/records/forever_consumption");
+        foreverTotal += LoreWHydroFlask;
+        if (firebase.setFloat("/records/forever_consumption", foreverTotal)) {
+          //Serial.println("Firebase Push Successful");
+          lcd.clear();
+          lcd.setCursor(0, 0);
+          lcd.print("Reset Success");
+          delay(2000);
+        } else {
+          lcd.print("Pushed Failed");
+          lcd.setCursor(0, 1);
+          lcd.print("Error#02");
+          delay(2000);
+        }
+      } else {
+        lcd.print("Pushed Failed");
+        lcd.setCursor(0, 1);
+        lcd.print("Error#01");
+        delay(2000);
+      }
+    }
+  }
+
+  long secondsUntilNextMidnight = 86400 - (abs(timeToMidnight));
+
+  Serial.println(secondsUntilNextMidnight);
+
+  esp_sleep_enable_timer_wakeup(secondsUntilNextMidnight * 1000000);
   esp_sleep_enable_ext0_wakeup(GPIO_NUM_25, 1);
 }
 
@@ -109,6 +151,51 @@ void loop() {
   updateLCD();
   checkIRInput();
   motionDetection();
+
+  time_t now = mktime(&timeinfo);
+  struct tm midnightTime = timeinfo;
+  midnightTime.tm_hour = wakeHour;
+  midnightTime.tm_min = wakeMinute;
+  midnightTime.tm_sec = wakeSeconds;
+  time_t midnight = mktime(&midnightTime);
+  long timeToMidnight = difftime(midnight, now);
+
+  if (abs(timeToMidnight) <= 60) {
+    lcd.clear();
+    lcd.print("Resetting...");
+    lcd.setCursor(0, 1);
+    lcd.print("Please Wait");
+    // The current time is within the range 00:00 to 00:01
+    // Execute Reset operation for website purpose 
+    if (getLocalTime(&timeinfo)) {
+      if (firebase.setInt("/records/" + formatDate(&timeinfo) + "/lorenzo/" + formatTime(&timeinfo), 0) && firebase.setInt("/records/" + formatDate(&timeinfo) + "/laci/" + formatTime(&timeinfo), 0)) {
+        foreverTotal = firebase.getFloat("/records/forever_consumption");
+        foreverTotal += LoreWHydroFlask;
+        if (firebase.setFloat("/records/forever_consumption", foreverTotal)) {
+          //Serial.println("Firebase Push Successful");
+          lcd.clear();
+          lcd.setCursor(0, 0);
+          lcd.print("Reset Success");
+          delay(2000);
+        } else {
+          lcd.print("Pushed Failed");
+          lcd.setCursor(0, 1);
+          lcd.print("Error#02");
+          delay(2000);
+        }
+      } else {
+        lcd.print("Pushed Failed");
+        lcd.setCursor(0, 1);
+        lcd.print("Error#01");
+        delay(2000);
+      }
+    }
+    lcd.clear();
+    lcd.print("Resetting...");
+    lcd.setCursor(0, 1);
+    lcd.print("Please Wait");
+    delay(60000);
+  }
 }
 
 void motionDetection() {
@@ -380,13 +467,22 @@ void clearSecondLine() {
 
 float customFilling() {
   doubleBeepSound();
+
+  const char* unitMeasure[] = {
+    "oz",
+    "cups",
+    "mL"
+  };
+  // if anything gets added only need to change output 'if'
+  int unitMeasureIndex = 0;
+
   String resultStr = "";
   bool check = true;
   bool panic = false;
   lcd.clear();
   lcd.println("OK=Done   #=Canc");
   IR.resume();
-  while (check == true) {
+  while (check) {
     if (IR.decode()) {
       // Remote input cases
       switch (IR.decodedIRData.decodedRawData) {
@@ -395,76 +491,76 @@ float customFilling() {
           resultStr += "1";
           clearSecondLine();
           lcd.setCursor(0, 1);
-          lcd.print(resultStr + "oz");
+          lcd.print(resultStr + unitMeasure[unitMeasureIndex]);
           break;
         case 0xE619FF00: // 2
           singleBeepSound();
           resultStr += "2";
           clearSecondLine();
           lcd.setCursor(0, 1);
-          lcd.print(resultStr + "oz");
+          lcd.print(resultStr + unitMeasure[unitMeasureIndex]);
           break;
         case 0xF20DFF00: // 3
           singleBeepSound();
           resultStr += "3";
           clearSecondLine();
           lcd.setCursor(0, 1);
-          lcd.print(resultStr + "oz");
+          lcd.print(resultStr + unitMeasure[unitMeasureIndex]);
           break;
         case 0xF30CFF00: // 4
           singleBeepSound();
           resultStr += "4";
           clearSecondLine();
           lcd.setCursor(0, 1);
-          lcd.print(resultStr + "oz");
+          lcd.print(resultStr + unitMeasure[unitMeasureIndex]);
           break;
         case 0xE718FF00: // 5
           singleBeepSound();
           resultStr += "5";
           clearSecondLine();
           lcd.setCursor(0, 1);
-          lcd.print(resultStr + "oz");
+          lcd.print(resultStr + unitMeasure[unitMeasureIndex]);
           break;
         case 0xA15EFF00: // 6
           singleBeepSound();
           resultStr += "6";
           clearSecondLine();
           lcd.setCursor(0, 1);
-          lcd.print(resultStr + "oz");
+          lcd.print(resultStr + unitMeasure[unitMeasureIndex]);
           break;
         case 0xF708FF00: // 7
           singleBeepSound();
           resultStr += "7";
           clearSecondLine();
           lcd.setCursor(0, 1);
-          lcd.print(resultStr + "oz");
+          lcd.print(resultStr + unitMeasure[unitMeasureIndex]);
           break;
         case 0xE31CFF00: // 8
           singleBeepSound();
           resultStr += "8";
           clearSecondLine();
           lcd.setCursor(0, 1);
-          lcd.print(resultStr + "oz");
+          lcd.print(resultStr + unitMeasure[unitMeasureIndex]);
           break;
         case 0xA55AFF00: // 9
           singleBeepSound();
           resultStr += "9";
           clearSecondLine();
           lcd.setCursor(0, 1);
-          lcd.print(resultStr + "oz");
+          lcd.print(resultStr + unitMeasure[unitMeasureIndex]);
           break;
         case 0xAD52FF00: // 0
           singleBeepSound();
           resultStr += "0";
           clearSecondLine();
           lcd.setCursor(0, 1);
-          lcd.print(resultStr + "oz");
+          lcd.print(resultStr + unitMeasure[unitMeasureIndex]);
           break;
         case 0xBF40FF00: // OK when done
           singleBeepSound();
           lcd.clear();
           //Serial.println("OK recieved");
-          lcd.print(resultStr + " Oz Confirmed");
+          lcd.print(resultStr + unitMeasure[unitMeasureIndex] + "Confirmed");
           delay(500);
           check = false;
           break;
@@ -489,18 +585,43 @@ float customFilling() {
         case 0xEA15FF00: // down button
           break;
         case 0xBB44FF00: // left button
+          singleBeepSound();
+          unitMeasureIndex -= 1;
+          if (unitMeasureIndex < 0) {
+            unitMeasureIndex = sizeof(unitMeasure) / sizeof(unitMeasure[0]) - 1;
+          }
+          clearSecondLine();
+          lcd.setCursor(0, 1);
+          lcd.print(resultStr + unitMeasure[unitMeasureIndex]);
           break;
         case 0xBC43FF00: // right button
+          singleBeepSound();
+          unitMeasureIndex += 1;
+          if (unitMeasureIndex >= sizeof(unitMeasure) / sizeof(unitMeasure[0])) {
+            unitMeasureIndex = 0;
+          }
+          clearSecondLine();
+          lcd.setCursor(0, 1);
+          lcd.print(resultStr + unitMeasure[unitMeasureIndex]);
           break;
-        }
+      }
       delay(200);
       IR.resume();
     }
   }
   if (panic == false) {
     //Serial.println(resultStr);
-    float resultFloat = resultStr.toFloat();
-    flowing(getSeconds(resultFloat), resultFloat);
+    float resultFloat = resultStr.toFloat(); // transloate to float
+
+    if (strcmp(unitMeasure[unitMeasureIndex], "oz") == 0){ // check unit measures
+      flowing(getSeconds(resultFloat), resultFloat);
+    } else if (strcmp(unitMeasure[unitMeasureIndex], "cups") == 0) {
+      resultFloat = resultFloat*8; // to get oz
+      flowing(getSeconds(resultFloat), resultFloat);
+    } else if (strcmp(unitMeasure[unitMeasureIndex], "mL") == 0) {
+      resultFloat = resultFloat * 0.0338;
+      flowing(getSeconds(resultFloat), resultFloat);
+    }
     return(resultFloat);
   }
   return 0;
