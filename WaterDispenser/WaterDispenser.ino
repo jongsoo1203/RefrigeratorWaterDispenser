@@ -37,6 +37,7 @@ const char* textArray2[] = {
 #define _SSID "IoT"          // Your WiFi SSID
 #define _PASSWORD "BigKhauna69"      // Your WiFi Password
 #define REFERENCE_URL "waterdispenserarduino-default-rtdb.firebaseio.com"  // Your Firebase project reference url
+#define uS_TO_S_FACTOR 1000000ULL
 
 struct tm timeinfo;
 IRrecv IR(27);
@@ -49,12 +50,16 @@ unsigned long lcdUpdateTime = 0;
 int currentTextIndex1,currentTextIndex2  = 0;
 const int motionPin = 25;
 unsigned long lastMotionTime = 0;
-const unsigned long motionDelay = 150000; // 5 minutes to screen off 
+const unsigned long motionDelay = 150000; // 2.5 minutes to screen off 
+
+// wake up timer selection
 int wakeHour = 0;
 int wakeMinute = 0;
 int wakeSeconds = 0;
+
 float foreverTotal = 0;
 bool alreadyDoneReset = false;
+uint64_t microSecondsUntilNextMidnight = 0;
 
 void setup() {
   Serial.begin(115200);
@@ -97,7 +102,7 @@ void setup() {
     delay(300);
   }
 
-  // Calculate the time until midnight
+  /* Calculate the time until midnight
   time_t now = mktime(&timeinfo);
   struct tm midnightTime = timeinfo;
   midnightTime.tm_hour = wakeHour;
@@ -105,9 +110,10 @@ void setup() {
   midnightTime.tm_sec = wakeSeconds;
   time_t midnight = mktime(&midnightTime);
   long timeToMidnight = difftime(midnight, now);
+
   Serial.println(String(timeToMidnight));
 
-  if (abs(timeToMidnight) <= 60) {
+  if (esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_TIMER) {
     // The current time is within the range 00:00 to 00:01
     // Execute Reset operation for website purpose 
     lcd.clear();
@@ -139,12 +145,19 @@ void setup() {
     }
   }
 
-  long secondsUntilNextMidnight = 86400 - (abs(timeToMidnight));
 
-  Serial.println(secondsUntilNextMidnight);
+  if (timeToMidnight < 0) {
+    microSecondsUntilNextMidnight = (86400 - (abs(timeToMidnight))) * uS_TO_S_FACTOR;
+  } else {
+    microSecondsUntilNextMidnight = (timeToMidnight) * uS_TO_S_FACTOR;
+  }
+  
+  Serial.println("Wake up in: " + String(microSecondsUntilNextMidnight) + " microS");
+  
+  esp_sleep_enable_timer_wakeup(microSecondsUntilNextMidnight);
+  */
+  //esp_sleep_enable_ext0_wakeup(GPIO_NUM_25, 1);
 
-  esp_sleep_enable_timer_wakeup(secondsUntilNextMidnight * 1000000);
-  esp_sleep_enable_ext0_wakeup(GPIO_NUM_25, 1);
 }
 
 void loop() {
@@ -159,6 +172,8 @@ void loop() {
   midnightTime.tm_sec = wakeSeconds;
   time_t midnight = mktime(&midnightTime);
   long timeToMidnight = difftime(midnight, now);
+
+  //Serial.println(String(timeToMidnight));
 
   if (abs(timeToMidnight) <= 60) {
     lcd.clear();
@@ -195,6 +210,10 @@ void loop() {
     lcd.setCursor(0, 1);
     lcd.print("Please Wait");
     delay(60000);
+    ESP.restart();
+  }
+  if (WiFi.status() != WL_CONNECTED) {
+    ESP.restart();
   }
 }
 
@@ -205,6 +224,8 @@ void motionDetection() {
     //Serial.println("Motion detected!");
     //digitalWrite(LCDLight, LOW); // Activate display when motion is detected
     lastMotionTime = millis();// Record the time of the last motion detection
+    lcd.backlight();
+    lcd.display();
     //lcdResetFlag = true;
   } else {
     //Serial.println("No motion detected.");
@@ -214,7 +235,9 @@ void motionDetection() {
       //lcdResetFlag = false;
       lcd.noBacklight();
       lcd.noDisplay(); // De-activate display when motion is not detected
-      esp_deep_sleep_start();
+      //Serial.flush(); 
+      //esp_deep_sleep_start();
+      //esp_light_sleep_start();
     }
   }
 }
