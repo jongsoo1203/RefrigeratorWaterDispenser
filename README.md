@@ -67,9 +67,7 @@ Others coming soon...
 ![3D design](https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/bef2b874-d871-40e2-90d2-5a8ef3ee35ca)
 
 - Set up a database
-- 
 <img width="260" alt="Screenshot 2024-01-19 at 8 47 16 PM" src="https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/972a31f8-d2f8-4be3-a782-37fe3cc299a8">
-
 
 <img width="211" alt="Screenshot 2024-01-19 at 8 47 05 PM" src="https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/fe1532e8-c7da-42ec-a79c-ab5a729e1170">
   
