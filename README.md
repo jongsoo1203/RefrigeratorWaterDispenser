@@ -1,10 +1,8 @@
-Collaboration: Lorenzo, Jongsoo, Minh, Max
+Collaboration: Lorenzo, Jongsoo, Minh
 
 # Smart Refrigerator Water Dispenser
 
-Schematics, code, Web-app and 3D files all available.
-
-Visit this for the WebApp [GitHub repository](https://github.com/loty2019/water-dispenser-web).
+Schematics, code, [Web-app](https://github.com/loty2019/water-dispenser-web) and [3D files](https://github.com/loty2019/RefrigeratorWaterDispenser/tree/RelayWaterDispenser/STL%20files) all available.
 
 ## Overview
 This project aims to automate the refrigerator water dispenser. Originally located inside the fridge, it has been moved outside using a custom 3D-designed fountain. We first prototyped it on Arduino and then transitioned to the ESP32 platform with internet capabilities. The entire system now operates on a real-time database hosted on Firebase.
@@ -67,6 +65,13 @@ Others coming soon...
 ![3D design](https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/bef2b874-d871-40e2-90d2-5a8ef3ee35ca)
 
 - Set up a database
-<img width="260" alt="Screenshot 2024-01-19 at 8 47 16 PM" src="https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/972a31f8-d2f8-4be3-a782-37fe3cc299a8">
-  
-- FINAL PRODUCT (you can build a case for it but I like to see it exposed lol)
+
+- Final Product
+![IMG_6574](https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/eec4cd2e-dd6b-4101-a653-195c64f9b052)
+<img width="800" alt="Screenshot 2024-03-11 at 12 46 52 AM" src="https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/22d49679-acf0-44b1-ab46-83fabc56e08a">
+
+
+https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/05de6919-4a6a-43a9-aefa-cd7f2b6fba2c
+
+
+
