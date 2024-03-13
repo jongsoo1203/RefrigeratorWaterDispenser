@@ -58,7 +58,7 @@ Others coming soon...
 
 - Follow the schematics and picture attached below (these are for the prototype) if you are not using the I2C protocol to cominicate with the display then use a NPN transistor to turn off the screen.
   I actually used a 3 pin relay so the image below is not accurate
-<img width="847" alt="Screenshot 2023-12-01 at 2 03 21 AM" src="https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/e65917bb-6f01-427a-8e4f-efa38740c8e7">
+<img width="847" alt="" src="https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/e65917bb-6f01-427a-8e4f-efa38740c8e7">
 [Water Dispenser.pdf](https://github.com/loty2019/RefrigeratorWaterDispenser/files/13521786/Water.Dispenser.pdf)
 
 - 3D printable files are in STL_files folder
@@ -67,7 +67,7 @@ Others coming soon...
 - Set up a database
 
 - Final Product
-<img height="500" alt="Screenshot 2024-03-11 at 12 46 52 AM" src="https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/eec4cd2e-dd6b-4101-a653-195c64f9b052">
+<img height="500" alt="" src="https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/eec4cd2e-dd6b-4101-a653-195c64f9b052">
 
 
 https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/05de6919-4a6a-43a9-aefa-cd7f2b6fba2c
