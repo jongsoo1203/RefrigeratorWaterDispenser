@@ -7,7 +7,7 @@ Schematics, code, [Web-app](https://github.com/loty2019/water-dispenser-web) and
 ## ℹ️ Overview
 This project aims to automate the refrigerator water dispenser. Originally located inside the fridge, it has been moved outside using a custom 3D-designed fountain. We first prototyped it on Arduino and then transitioned to the ESP32 platform with internet capabilities. The entire system now operates on a real-time database hosted on Firebase.
 
-## ❔Purpose (Why should this exist?)
+### Purpose (Why should this exist?)
 
 The fridge has an internal water dispensing system that is manual. You have to hold the water bottle up, then at the same time press a hard button. In this process, the refrigerator loses coldness, and you get cold. Our system, however, utilizes an external custom-designed fountain that provides cold water after just 2 seconds of water flowing with no need to hold or press anything.
 
