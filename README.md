@@ -1,5 +1,3 @@
-Collaboration: Lorenzo, Jongsoo, Minh
-
 # 🛜 Smart Refrigerator Water Dispenser
 
 Schematics, code, [Web-app](https://github.com/loty2019/water-dispenser-web) and [3D files](https://github.com/loty2019/RefrigeratorWaterDispenser/tree/RelayWaterDispenser/STL%20files) all available.
@@ -64,13 +62,15 @@ Others coming soon...
 - 3D printable files are in STL_files folder
 ![3D design](https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/bef2b874-d871-40e2-90d2-5a8ef3ee35ca)
 
-- Set up a database
+- Set up a database and a web app
+
+<img width="1321" alt="Screenshot 2024-03-16 at 11 35 05 AM" src="https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/f05776af-bb97-45fa-b0fc-649a54ad1cb1">
+
 
 - Final Product
 <img height="500" alt="" src="https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/eec4cd2e-dd6b-4101-a653-195c64f9b052">
 
-
 https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/05de6919-4a6a-43a9-aefa-cd7f2b6fba2c
 
-
+Collaboration: Lorenzo, Jongsoo, Minh
 
