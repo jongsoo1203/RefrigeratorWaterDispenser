@@ -61,6 +61,7 @@ Others coming soon...
 
 - 3D printable files are in STL_files folder
 ![3D design](https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/bef2b874-d871-40e2-90d2-5a8ef3ee35ca)
+![fusion fauntain v2](https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/9ec73046-ca15-4542-b037-f5fd5d028dbc)
 
 - Set up a database and a web app
 
@@ -68,7 +69,7 @@ Others coming soon...
 
 
 - Final Product
-<img height="500" alt="" src="https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/eec4cd2e-dd6b-4101-a653-195c64f9b052">
+<img height="500" alt="" src="https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/d4fbf3be-4637-4666-ac03-96233b9b80b8">
 
 https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/05de6919-4a6a-43a9-aefa-cd7f2b6fba2c
 
