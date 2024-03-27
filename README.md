@@ -68,7 +68,7 @@ Others coming soon...
 
 
 - Final Product
-<img height="500" alt="" src="https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/eec4cd2e-dd6b-4101-a653-195c64f9b052">
+<img height="500" alt="" src="https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/d4fbf3be-4637-4666-ac03-96233b9b80b8">
 
 https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/05de6919-4a6a-43a9-aefa-cd7f2b6fba2c
 
