@@ -1,19 +1,15 @@
-Collaboration: Lorenzo, Jongsoo, Minh, Max
+# 🛜 Smart Refrigerator Water Dispenser
 
-# Smart Refrigerator Water Dispenser
+Schematics, code, [Web-app](https://github.com/loty2019/water-dispenser-web) and [3D files](https://github.com/loty2019/RefrigeratorWaterDispenser/tree/RelayWaterDispenser/STL%20files) all available.
 
-Schematics, code, Web-app and 3D files all available.
-
-Visit this for the WebApp [GitHub repository](https://github.com/loty2019/water-dispenser-web).
-
-## Overview
+## ℹ️ Overview
 This project aims to automate the refrigerator water dispenser. Originally located inside the fridge, it has been moved outside using a custom 3D-designed fountain. We first prototyped it on Arduino and then transitioned to the ESP32 platform with internet capabilities. The entire system now operates on a real-time database hosted on Firebase.
 
-## Purpose (Why should this exist?)
+### Purpose (Why should this exist?)
 
 The fridge has an internal water dispensing system that is manual. You have to hold the water bottle up, then at the same time press a hard button. In this process, the refrigerator loses coldness, and you get cold. Our system, however, utilizes an external custom-designed fountain that provides cold water after just 2 seconds of water flowing with no need to hold or press anything.
 
-## Features
+## 🗂️ Features
 
 ### 1. Remote Control
 
@@ -29,7 +25,7 @@ We've integrated a motion sensor that wakes the device from deep sleep only when
 
 ### 4. Web App
 
-We chose to use Next.js and Tailwind CSS to develop a simple yet useful UI to keep track of the water consumption of each user.
+We chose to use Next.js, React and Tailwind CSS to develop a simple yet useful UI to keep track of the water consumption of each user.
 
 ### 5. Custom Feature
 
@@ -60,13 +56,22 @@ Others coming soon...
 
 - Follow the schematics and picture attached below (these are for the prototype) if you are not using the I2C protocol to cominicate with the display then use a NPN transistor to turn off the screen.
   I actually used a 3 pin relay so the image below is not accurate
-<img width="847" alt="Screenshot 2023-12-01 at 2 03 21 AM" src="https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/e65917bb-6f01-427a-8e4f-efa38740c8e7">
+<img width="847" alt="" src="https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/e65917bb-6f01-427a-8e4f-efa38740c8e7">
 [Water Dispenser.pdf](https://github.com/loty2019/RefrigeratorWaterDispenser/files/13521786/Water.Dispenser.pdf)
 
 - 3D printable files are in STL_files folder
 ![3D design](https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/bef2b874-d871-40e2-90d2-5a8ef3ee35ca)
+![fusion fauntain v2](https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/9ec73046-ca15-4542-b037-f5fd5d028dbc)
 
-- Set up a database
-<img width="260" alt="Screenshot 2024-01-19 at 8 47 16 PM" src="https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/972a31f8-d2f8-4be3-a782-37fe3cc299a8">
-  
-- FINAL PRODUCT (you can build a case for it but I like to see it exposed lol)
+- Set up a database and a web app
+
+<img width="1321" alt="Screenshot 2024-03-16 at 11 35 05 AM" src="https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/f05776af-bb97-45fa-b0fc-649a54ad1cb1">
+
+
+- Final Product
+<img height="500" alt="" src="https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/d4fbf3be-4637-4666-ac03-96233b9b80b8">
+
+https://github.com/loty2019/RefrigeratorWaterDispenser/assets/125715080/05de6919-4a6a-43a9-aefa-cd7f2b6fba2c
+
+Collaboration: Lorenzo, Jongsoo, Minh
+
