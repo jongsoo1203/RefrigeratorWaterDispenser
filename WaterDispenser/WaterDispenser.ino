@@ -3,6 +3,9 @@
 // Error#02 = failed to push total consumption on database
 // Error#03 = failed to generate date or hour due to connection issue
 
+
+// Note to self: compile with ESP32-WROOM-DA with Baud Rate = 115200
+
 // ******* MODIFY FOR NEW WATER BOTTLE (USE OZ) *******
 const float LoreWHydroFlask = 24;
 const float LaciHydroFlask = 32;
@@ -101,63 +104,6 @@ void setup() {
   while (!getLocalTime(&timeinfo)) {
     delay(300);
   }
-
-  /* Calculate the time until midnight
-  time_t now = mktime(&timeinfo);
-  struct tm midnightTime = timeinfo;
-  midnightTime.tm_hour = wakeHour;
-  midnightTime.tm_min = wakeMinute;
-  midnightTime.tm_sec = wakeSeconds;
-  time_t midnight = mktime(&midnightTime);
-  long timeToMidnight = difftime(midnight, now);
-
-  Serial.println(String(timeToMidnight));
-
-  if (esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_TIMER) {
-    // The current time is within the range 00:00 to 00:01
-    // Execute Reset operation for website purpose 
-    lcd.clear();
-    lcd.print("Resetting...");
-    lcd.setCursor(0, 1);
-    lcd.print("Please Wait");
-    if (getLocalTime(&timeinfo)) {
-      if (firebase.setInt("/records/" + formatDate(&timeinfo) + "/lorenzo/" + formatTime(&timeinfo), 0) && firebase.setInt("/records/" + formatDate(&timeinfo) + "/laci/" + formatTime(&timeinfo), 0)) {
-        foreverTotal = firebase.getFloat("/records/forever_consumption");
-        foreverTotal += LoreWHydroFlask;
-        if (firebase.setFloat("/records/forever_consumption", foreverTotal)) {
-          //Serial.println("Firebase Push Successful");
-          lcd.clear();
-          lcd.setCursor(0, 0);
-          lcd.print("Reset Success");
-          delay(2000);
-        } else {
-          lcd.print("Pushed Failed");
-          lcd.setCursor(0, 1);
-          lcd.print("Error#02");
-          delay(2000);
-        }
-      } else {
-        lcd.print("Pushed Failed");
-        lcd.setCursor(0, 1);
-        lcd.print("Error#01");
-        delay(2000);
-      }
-    }
-  }
-
-
-  if (timeToMidnight < 0) {
-    microSecondsUntilNextMidnight = (86400 - (abs(timeToMidnight))) * uS_TO_S_FACTOR;
-  } else {
-    microSecondsUntilNextMidnight = (timeToMidnight) * uS_TO_S_FACTOR;
-  }
-  
-  Serial.println("Wake up in: " + String(microSecondsUntilNextMidnight) + " microS");
-  
-  esp_sleep_enable_timer_wakeup(microSecondsUntilNextMidnight);
-  */
-  //esp_sleep_enable_ext0_wakeup(GPIO_NUM_25, 1);
-
 }
 
 void loop() {
@@ -165,53 +111,53 @@ void loop() {
   checkIRInput();
   motionDetection();
 
-  time_t now = mktime(&timeinfo);
-  struct tm midnightTime = timeinfo;
-  midnightTime.tm_hour = wakeHour;
-  midnightTime.tm_min = wakeMinute;
-  midnightTime.tm_sec = wakeSeconds;
-  time_t midnight = mktime(&midnightTime);
-  long timeToMidnight = difftime(midnight, now);
+  // time_t now = mktime(&timeinfo);
+  // struct tm midnightTime = timeinfo;
+  // midnightTime.tm_hour = wakeHour;
+  // midnightTime.tm_min = wakeMinute;
+  // midnightTime.tm_sec = wakeSeconds;
+  // time_t midnight = mktime(&midnightTime);
+  // long timeToMidnight = difftime(midnight, now);
 
-  //Serial.println(String(timeToMidnight));
+  // //Serial.println(String(timeToMidnight));
 
-  if (abs(timeToMidnight) <= 60) {
-    lcd.clear();
-    lcd.print("Resetting...");
-    lcd.setCursor(0, 1);
-    lcd.print("Please Wait");
-    // The current time is within the range 00:00 to 00:01
-    // Execute Reset operation for website purpose 
-    if (getLocalTime(&timeinfo)) {
-      if (firebase.setInt("/records/" + formatDate(&timeinfo) + "/lorenzo/" + formatTime(&timeinfo), 0) && firebase.setInt("/records/" + formatDate(&timeinfo) + "/laci/" + formatTime(&timeinfo), 0)) {
-        foreverTotal = firebase.getFloat("/records/forever_consumption");
-        foreverTotal += LoreWHydroFlask;
-        if (firebase.setFloat("/records/forever_consumption", foreverTotal)) {
-          //Serial.println("Firebase Push Successful");
-          lcd.clear();
-          lcd.setCursor(0, 0);
-          lcd.print("Reset Success");
-          delay(2000);
-        } else {
-          lcd.print("Pushed Failed");
-          lcd.setCursor(0, 1);
-          lcd.print("Error#02");
-          delay(2000);
-        }
-      } else {
-        lcd.print("Pushed Failed");
-        lcd.setCursor(0, 1);
-        lcd.print("Error#01");
-        delay(2000);
-      }
-    }
-    lcd.clear();
-    lcd.print("Resetting...");
-    lcd.setCursor(0, 1);
-    lcd.print("Please Wait");
-    delay(60000);
-    ESP.restart();
-  }
+  // if (abs(timeToMidnight) <= 60) {
+  //   lcd.clear();
+  //   lcd.print("Resetting...");
+  //   lcd.setCursor(0, 1);
+  //   lcd.print("Please Wait");
+  //   // The current time is within the range 00:00 to 00:01
+  //   // Execute Reset operation for website purpose 
+  //   if (getLocalTime(&timeinfo)) {
+  //     if (firebase.setInt("/records/" + formatDate(&timeinfo) + "/lorenzo/" + formatTime(&timeinfo), 0) && firebase.setInt("/records/" + formatDate(&timeinfo) + "/laci/" + formatTime(&timeinfo), 0)) {
+  //       foreverTotal = firebase.getFloat("/records/forever_consumption");
+  //       foreverTotal += LoreWHydroFlask;
+  //       if (firebase.setFloat("/records/forever_consumption", foreverTotal)) {
+  //         //Serial.println("Firebase Push Successful");
+  //         lcd.clear();
+  //         lcd.setCursor(0, 0);
+  //         lcd.print("Reset Success");
+  //         delay(2000);
+  //       } else {
+  //         lcd.print("Pushed Failed");
+  //         lcd.setCursor(0, 1);
+  //         lcd.print("Error#02");
+  //         delay(2000);
+  //       }
+  //     } else {
+  //       lcd.print("Pushed Failed");
+  //       lcd.setCursor(0, 1);
+  //       lcd.print("Error#01");
+  //       delay(2000);
+  //     }
+  //   }
+  //   lcd.clear();
+  //   lcd.print("Resetting...");
+  //   lcd.setCursor(0, 1);
+  //   lcd.print("Please Wait");
+  //   delay(60000);
+  //   ESP.restart();
+  // }
   if (WiFi.status() != WL_CONNECTED) {
     ESP.restart();
   }
@@ -244,16 +190,16 @@ void motionDetection() {
 
 void checkIRInput() {
   // Update the current date and time
-  if (getLocalTime(&timeinfo)) {
-    float ozNew;
-    bool recieved = false;
-    if (IR.decode()) {
-      // Convert the signal value to a number
-      Serial.println(IR.decodedIRData.decodedRawData, HEX);
-      // Remote input cases
-      switch (IR.decodedIRData.decodedRawData) {
-        case 0xE916FF00: // 1 my water
-          doubleBeepSound();
+  float ozNew;
+  bool recieved = false;
+  if (IR.decode()) {
+    // Convert the signal value to a number
+    Serial.println(IR.decodedIRData.decodedRawData, HEX);
+    // Remote input cases
+    switch (IR.decodedIRData.decodedRawData) {
+      case 0xE916FF00: // 1 my water
+        doubleBeepSound();
+        if (getLocalTime(&timeinfo)) {
           lcd.clear();
           lcd.print("Loading...");
           flowing(getSeconds(LoreWHydroFlask), LoreWHydroFlask);
@@ -280,9 +226,11 @@ void checkIRInput() {
             lcd.print("Error#01");
             delay(2000);
           }
-          break;
-        case 0xE619FF00: // 2 laci water
-          doubleBeepSound();
+        }
+        break;
+      case 0xE619FF00: // 2 laci water
+        doubleBeepSound();
+        if (getLocalTime(&timeinfo)) {
           lcd.clear();
           lcd.print("Loading...");
           flowing(getSeconds(LaciHydroFlask), LaciHydroFlask);
@@ -309,106 +257,106 @@ void checkIRInput() {
             lcd.print("Error#01");
             delay(2000);
           }
-          break;
-        case 0xB54AFF00: // # custom fill
-          //Serial.println("# RECIEVED");
-          // increase performance and user expirience but worst memory 
-          ozNew = customFilling();
-          if (ozNew != 0) {
-            // assign water consumprio to the person
-            lcd.clear();
-            lcd.print("Record it ?");
-            lcd.setCursor(0, 1);
-            lcd.print("# to cancel");
-            // loop wait for user input
-            while (!recieved) {
-              if (IR.decode()) {
-                if (IR.decodedIRData.decodedRawData == 0xBF40FF00) { // if ok is pressed
-                  doubleBeepSound();
-                  lcd.clear();
-                  lcd.print("Press ur number");
-                  lcd.setCursor(0, 1);
-                  lcd.print("to record data..");
-                  while (!recieved) {
-                    if (IR.decode()) {
-                      switch (IR.decodedIRData.decodedRawData) {
-                        case 0xE916FF00: // 1 my water
-                          doubleBeepSound();
-                          lcd.clear();
-                          lcd.print("Loading...");
-                          if (firebase.setInt("/records/" + formatDate(&timeinfo) + "/lorenzo/" + formatTime(&timeinfo), ozNew)){
-                            foreverTotal = firebase.getFloat("/records/forever_consumption");
-                            foreverTotal += ozNew;
-                            firebase.setFloat("/records/forever_consumption", foreverTotal);
+        }
+        break;
+      
+      case 0xAD52FF00: // 0
+        singleBeepSound();
+        digitalWrite(relay, !digitalRead(relay));
+        break;
+      case 0xB54AFF00: // # custom fill
+        //Serial.println("# RECIEVED");
+        // increase performance and user expirience but worst memory 
+        ozNew = customFilling();
+        if (ozNew != 0) {
+          // assign water consumprio to the person
+          lcd.clear();
+          lcd.print("Record it ?");
+          lcd.setCursor(0, 1);
+          lcd.print("# to cancel");
+          // loop wait for user input
+          while (!recieved) {
+            if (IR.decode()) {
+              if (IR.decodedIRData.decodedRawData == 0xBF40FF00) { // if ok is pressed
+                doubleBeepSound();
+                lcd.clear();
+                lcd.print("Press ur number");
+                lcd.setCursor(0, 1);
+                lcd.print("to record data..");
+                while (!recieved) {
+                  if (IR.decode()) {
+                    switch (IR.decodedIRData.decodedRawData) {
+                      case 0xE916FF00: // 1 my water
+                        doubleBeepSound();
+                        lcd.clear();
+                        lcd.print("Loading...");
+                        if (firebase.setInt("/records/" + formatDate(&timeinfo) + "/lorenzo/" + formatTime(&timeinfo), ozNew)){
+                          foreverTotal = firebase.getFloat("/records/forever_consumption");
+                          foreverTotal += ozNew;
+                          firebase.setFloat("/records/forever_consumption", foreverTotal);
 
-                            Serial.println("Pushed Success");
-                            lcd.setCursor(0, 1);
-                            lcd.print("Pushed Success");
-                            delay(2000);
-                          } else {
-                            Serial.println("Pushed Failed Error#01");
-                            lcd.print("Pushed Failed");
-                            lcd.setCursor(0, 1);
-                            lcd.print("Error#01");
-                            delay(2000);
-                          }
-                          recieved = true;
-                          break;
-                        case 0xE619FF00: // 2 laci water
-                          doubleBeepSound();
-                          lcd.clear();
-                          lcd.print("Loading...");
-                          if (firebase.setInt("/records/" + formatDate(&timeinfo) + "/lorenzo/" + formatTime(&timeinfo), ozNew)){
-                            foreverTotal = firebase.getFloat("/records/forever_consumption");
-                            foreverTotal += ozNew;
-                            firebase.setFloat("/records/forever_consumption", foreverTotal);
+                          Serial.println("Pushed Success");
+                          lcd.setCursor(0, 1);
+                          lcd.print("Pushed Success");
+                          delay(2000);
+                        } else {
+                          Serial.println("Pushed Failed Error#01");
+                          lcd.print("Pushed Failed");
+                          lcd.setCursor(0, 1);
+                          lcd.print("Error#01");
+                          delay(2000);
+                        }
+                        recieved = true;
+                        break;
+                      case 0xE619FF00: // 2 laci water
+                        doubleBeepSound();
+                        lcd.clear();
+                        lcd.print("Loading...");
+                        if (firebase.setInt("/records/" + formatDate(&timeinfo) + "/lorenzo/" + formatTime(&timeinfo), ozNew)){
+                          foreverTotal = firebase.getFloat("/records/forever_consumption");
+                          foreverTotal += ozNew;
+                          firebase.setFloat("/records/forever_consumption", foreverTotal);
 
-                            //Serial.println("Pushed Success");
-                            lcd.setCursor(0, 1);
-                            lcd.print("Pushed Success");
-                            delay(2000);
-                          } else {
-                            //Serial.println("Pushed Failed Error#01");
-                            lcd.print("Pushed Failed");
-                            lcd.setCursor(0, 1);
-                            lcd.print("Error#01");
-                            delay(2000);
-                          }
-                          recieved = true;
-                          break;
-                      }
-                      delay(500);
-                      IR.resume();
+                          //Serial.println("Pushed Success");
+                          lcd.setCursor(0, 1);
+                          lcd.print("Pushed Success");
+                          delay(2000);
+                        } else {
+                          //Serial.println("Pushed Failed Error#01");
+                          lcd.print("Pushed Failed");
+                          lcd.setCursor(0, 1);
+                          lcd.print("Error#01");
+                          delay(2000);
+                        }
+                        recieved = true;
+                        break;
                     }
+                    delay(500);
+                    IR.resume();
                   }
                 }
-                // if # we brake and exit the loop
-                else if (IR.decodedIRData.decodedRawData == 0xB54AFF00) {
-                  doubleBeepSound();
-                  lcd.clear();
-                  recieved = true;
-                  break;
-                }
-                delay(200);
-                IR.resume();
               }
+              // if # we brake and exit the loop
+              else if (IR.decodedIRData.decodedRawData == 0xB54AFF00) {
+                doubleBeepSound();
+                lcd.clear();
+                recieved = true;
+                break;
+              }
+              delay(200);
+              IR.resume();
             }
           }
-          break;
-        case 0xBD42FF00: // * menu 
-          flowMenu();
-          break;
-      }
-      delay(15000);
-      IR.resume();
+        }
+        break;
+      
+      
+      case 0xBD42FF00: // * menu 
+        flowMenu();
+        break;
     }
-  } else {
-    Serial.println("Failed to obtain time");
-    lcd.clear();
-    lcd.print("Failed time get");
-    lcd.setCursor(0, 1);
-    lcd.print("Error#03");
-    delay(1000);
+    delay(100);
+    IR.resume();
   }
 }
 
