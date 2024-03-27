@@ -9,11 +9,13 @@
 // ******* MODIFY FOR NEW WATER BOTTLE (USE OZ) *******
 const float LoreWHydroFlask = 24;
 const float LaciHydroFlask = 32;
+const float glassOfWater = 12;
 // *****************************************
 
 const char* textArray1[] = {
   "Press 1 for",
   "Press 2 for",
+  "Press 4 for",
   "Press 0 for",
   "Press # for",
   "Press * for"
@@ -21,6 +23,7 @@ const char* textArray1[] = {
 const char* textArray2[] = {
   "Lorenzo's Bottle",
   "Laci's Bottle",
+  "Glass of Water",
   "Unlimited Fill",
   "Custom Oz Fill",
   "Flow Menu"
@@ -260,6 +263,12 @@ void checkIRInput() {
         }
         break;
       
+      case 0xF30CFF00: // 4
+          doubleBeepSound();
+          lcd.clear();
+          lcd.print("Loading...");
+          flowing(getSeconds(glassOfWater), glassOfWater);
+          break;
       case 0xAD52FF00: // 0
         singleBeepSound();
         digitalWrite(relay, !digitalRead(relay));
